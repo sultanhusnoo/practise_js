@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<body>
+
+    <p> Doing some stuff.</p>
+
+    <p>Trying error catching</p>
+
+    <p id="my_error"></p>
+
+</body>
+
+</html>
+
+<script>
+    console.log("Firstline \n \t 2nd \n \t 3rd")
+    try{
+        adddlert("Some stuff");
+    }
+    catch(err){
+        document.getElementById("my_error").innerHTML = err.message;
+    }
+</script>
