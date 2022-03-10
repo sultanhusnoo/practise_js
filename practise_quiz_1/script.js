@@ -2,11 +2,10 @@
 //  features that I am still working on.
 
 //  Questions
-
 const Questions = [{
         id: 0,
         q: "Who taught Harry expelliarmus?",
-        a:[ {text: "Snape", isCorrect: true, isSelected: false},    
+        a:[ {text: "Snape", isCorrect: true},    
             {text: "Lockart", isCorrect: false},
             {text: "Umbridge", isCorrect: false},
             {text: "Trelawney", isCorrect: false}]
@@ -26,20 +25,38 @@ const Questions = [{
             {text: "Myrtle", isCorrect: false},
             {text: "Tom", isCorrect: true },
             {text: "Ginny", isCorrect: false}]
+    },
+    {
+        id: 3,
+        q: "What is the first horcrux destroyed?",
+        a:[ {text: "Locket", isCorrect: false},    
+            {text: "Harry", isCorrect: false},
+            {text: "Cup", isCorrect: false},
+            {text: "Diary", isCorrect: true}]
     }
 ]
 
-// Set start
+// Set start - indicates that this is the first iteration
 var start = true;
+
+//  Variables used for score-keeping
+let user_score = 0;
+let number_of_q = 0;
 
 // Iterate
 function iterate(id){
-    
-    // Getting the result display section
-    var result = document.getElementsByClassName("result");
-    result[0].innerText = "";
 
-    // Getting the question
+    var evaluated = false;
+
+    //  Getting the section for score display
+    var score = document.getElementById("score");
+    score.innerHTML = user_score + " / " + number_of_q;
+
+    //  Getting the result display section
+    var result = document.getElementById("result");
+    result.innerHTML = "----";
+
+    //  Getting the question
     const question = document.getElementById("question");
 
     //  Setting the question text
@@ -63,7 +80,7 @@ function iterate(id){
     opt3.value = Questions[id].a[2].isCorrect;
     opt4.value = Questions[id].a[3].isCorrect;
 
-    var selected = "";
+    var selected = false;
 
     // Show selection for opt1
     opt1.addEventListener("click", ()=>{
@@ -101,38 +118,48 @@ function iterate(id){
         selected = opt4.value;
     })
 
-    // Grabbing the evaluate button
-    const evaluate = document.getElementsByClassName("evaluate");
+    // Grabbing the evaluate button and evaluating result
+    const evaluate = document.getElementById("evaluate");
 
-    // Evaluate 
-    evaluate[0].addEventListener("click", ()=>{
-        if (selected == "true"){
-            result[0].innerHTML = "True";
-            result[0].stlye.color = "green";
+    evaluate.addEventListener("click", function(){
+        if ((selected == "true")&(evaluated==false)){
+            evaluated = true;
+            result.innerHTML = "TRUE";
+            user_score++;
+            console.log(user_score);
+            score.innerHTML = String(user_score).concat(" / ", String(number_of_q));
         }
-        else {
-            result[0].innerHTML = "False";
-            result[0].stlye.color = "red    ";
+        else if (selected == "false"){
+            result.innerHTML = "False";
+            evaluated = true;
         }
     })
+    
 }
 
 if (start){
+    number_of_q = Object.keys(Questions).length;
     iterate("0");
 }
 
 // Next button and method
-const next = document.getElementsByClassName("next")[0];
+const next = document.getElementById("next");
 var id = 0;
 
-next.addEventListener("click", ()=>{
+next.addEventListener("click", function(){
     start = false;
-    if (id<2){
+    if (id < (number_of_q - 1))
+    {
         id++;
         iterate(id);
-        console.log(id);
+        
+        //  Clear user selection
+        opt1.style.backgroundColor = "lightskyblue";
+        opt2.style.backgroundColor = "lightskyblue";
+        opt3.style.backgroundColor = "lightskyblue";
+        opt4.style.backgroundColor = "lightskyblue";
+    }
+    else if (id == (number_of_q-1)){
+        alert("Quiz Ended. Your score is " + String(user_score) +" over " + String(number_of_q))
     }
 })
-
-
-
